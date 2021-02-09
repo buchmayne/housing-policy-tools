@@ -11,11 +11,6 @@
 #' get_cost_burdening_by_income_and_tenure(year = 2019, geography = "county", state = "ID", survey = "acs5")
 
 
-library(dplyr)
-library(stringr)
-library(tidycensus)
-
-
 get_cost_burdening_by_income_and_tenure <- function(year = 2019, geography, state = NULL, county = NULL, survey = "acs5") {
 
   # restrict queries to state, county, place, and tract
