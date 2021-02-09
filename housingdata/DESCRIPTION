@@ -1,11 +1,14 @@
 Package: housingdata
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Returns Census Data Related to Housing in a Convenient Format
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Marley Buchman
+Maintainer: The package maintainer <buchman@econw.com>
+Description: Packages predefined functions to generate summaries of census data commonly used for analyzing housing and land use policy
+License: TBD
 Encoding: UTF-8
 LazyData: true
+Imports:
+  dplyr,
+  tidycensus,
+  stringr
