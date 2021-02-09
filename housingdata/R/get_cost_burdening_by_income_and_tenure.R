@@ -23,6 +23,11 @@ get_cost_burdening_by_income_and_tenure <- function(year = 2019, geography, stat
     stop("acs5 and acs1 are the only valid inputs to survey")
   }
 
+  # check for place + county combo which is invalid
+  if (geography == "place" & !is.null(county)) {
+    stop("Can't pass county parameter when using place as geography")
+  }
+
   # get census variable names
   acs_vars <- tidycensus::load_variables(year = year, dataset = survey, cache = TRUE)
   cost_burdening_tbl <- "B25106"
