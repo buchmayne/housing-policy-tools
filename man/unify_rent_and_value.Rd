@@ -6,6 +6,11 @@
 \usage{
 unify_rent_and_value(renters_data, owners_data)
 }
+\arguments{
+\item{renters_data}{renters data from CHAS already formatted}
+
+\item{owners_data}{owners data from CHAS already formatted}
+}
 \description{
 Internal function to unify rent and ownership CHAS bins
 }

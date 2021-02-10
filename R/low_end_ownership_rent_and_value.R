@@ -1,7 +1,7 @@
 #' Internal function to unify rent and ownership CHAS bins
 #'
-#' @param renters_data
-#' @param owners_data
+#' @param renters_data renters data from CHAS already formatted
+#' @param owners_data owners data from CHAS already formatted
 #' @export
 
 low_end_ownership_rent_and_value <- function(renters_data, owners_data) {

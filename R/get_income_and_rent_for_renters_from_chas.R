@@ -17,103 +17,28 @@ get_income_and_rent_for_renters_from_chas <- function(geography, state) {
 
   if (geography == "county") {
 
-    tbl18C <- read.csv("data/CHAS_COUNTY_13_17/Table18C.csv", stringsAsFactors = FALSE)
-    fips_joiner <- tidycensus::fips_codes
+    load("data/tbl18C_county.rda")
 
-    geoid_prefix <- "^05000US"
+    # filter on state
+    tbl18C_county <- tbl18C_county %>%
+      dplyr::filter(state_abbreviation == state)
+
+
+    return(tbl18C_county)
 
   }
 
   else if (geography == "place") {
 
-    tbl18C <- read.csv("data/CHAS_PLACES_13_17/Table18C.csv", stringsAsFactors = FALSE)
+    load("data/tbl18C_places.rda")
 
-    fips_joiner <- tidycensus::fips_codes %>%
-      dplyr::select(-county, -county_code) %>%
-      dplyr::distinct()
+    # filter on state
+    tbl18C_places <- tbl18C_places %>%
+      dplyr::filter(state_abbreviation == state)
 
-    geoid_prefix <- "^16000US"
+
+    return(tbl18C_places)
 
   }
-
-
-  dd_col_names <- c(
-    "Column Name",
-    "Column Type",
-    "Description 1",
-    "Description 2",
-    "Description 3",
-    "Description 4",
-    "Description 5",
-    "Census variable codes"
-  )
-
-  data_dictionary <- read.csv(
-    "data/CHAS_TBL18_DATA_DICTIONARY.csv",
-    stringsAsFactors = FALSE,
-    sep = "\t",
-    col.names = dd_col_names,
-    header = FALSE
-    )
-
-
-  tbl18C_data_dictionary <- data_dictionary %>%
-    dplyr::filter(Column.Name %in% names(tbl18C)) %>%
-    dplyr::filter(Column.Type == "Detail") %>%
-    dplyr::arrange(Description.3, Description.4) %>%
-    dplyr::rename(CHAS_COLS = Column.Name)
-
-  tbl18C <- tbl18C %>%
-    dplyr::select(geoid, name, tbl18C_data_dictionary$CHAS_COLS)
-
-  tbl18C <- tbl18C %>%
-    tidyr::gather(key = CHAS_COLS, value = estimate, -geoid, -name) %>%
-    dplyr::inner_join(tbl18C_data_dictionary) %>%
-    dplyr::group_by(geoid, name, Description.3, Description.4) %>%
-    dplyr::summarise(renter_occ_hu = sum(estimate)) %>%
-    dplyr::ungroup()
-
-
-  tbl18C <- tbl18C %>%
-    dplyr::mutate(geoid = gsub(geoid_prefix, "", geoid)) %>%
-    dplyr::mutate(
-      state_code = stringr::str_sub(geoid, 1, 2),
-      county_code = stringr::str_sub(geoid, 3, 5)
-    ) %>%
-    dplyr::mutate(
-      rent = dplyr::case_when(
-        Description.3 == " AND Rent greater than RHUD80" ~ "+80%",
-        Description.3 == " AND Rent greater than RHUD30 and less than or equal to RHUD50" ~ "30-50%",
-        Description.3 == " AND Rent greater than RHUD50 and less than or equal to RHUD80" ~ "50-80%",
-        Description.3 == " AND Rent less than or equal to RHUD30" ~ "0-30%"
-      )
-    ) %>%
-    dplyr::mutate(
-      household_income = dplyr::case_when(
-        Description.4 == " AND Household income greater than 100% of HAMFI" ~ "+100%",
-        Description.4 == " AND Household income greater than 50% of HAMFI but less than or equal to 80% of HAMFI" ~ "50-80%",
-        Description.4 == " AND Household income greater than 80% of HAMFI but less than or equal to 100% of HAMFI" ~ "80-100%",
-        Description.4 == " AND Household income less than or equal to 30% of HAMFI" ~ "0-30%",
-        Description.4 == " AND Household income greater than 30% of HAMFI but less than or equal to 50% of HAMFI" ~ "30-50%"
-      )
-    ) %>%
-    dplyr::select(-Description.3, -Description.4)
-
-
-  # join fips codes
-  tbl18C <- tbl18C %>%
-    dplyr::inner_join(fips_joiner) %>%
-    dplyr::rename(state_abbreviation = state)
-
-  # filter on state
-  tbl18C <- tbl18C %>%
-    dplyr::filter(state_abbreviation == state)
-
-  if (geography == "place") {
-    tbl18C <- tbl18C %>%
-      dplyr::select(-county_code)
-  }
-
-  return(tbl18C)
 
 }

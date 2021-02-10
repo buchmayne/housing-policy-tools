@@ -3,7 +3,7 @@
 #' This function formats table 18 of the 2013-2017 CHAS data to return the "matrix" of units by household income and unit affordability.
 #' @param geography Options are "county" or "place", determines the geographic unit to return CHAS data for.
 #' @param state U.S. state to return data for, requires the state two letter abbreviation to be passed
-#' @param bin_adjustment_type Options are either "unify" or "low end ownership", if "unify" is selected the bins are unified across renters and owners which makes the results less granular but no assumptions are made. "low end ownership" preserves the 0-30% affordability bin but assumes all ownership units in 0-50% are actuall in 30-50%.
+#' @param bin_adjustment_type Options are either "unify" or "low end ownership", if "unify" is selected the bins are unified across renters and owners which makes the results less granular but no assumptions are made. "low end ownership" preserves the 0-30pct affordability bin but assumes all ownership units in 0-50pct are actually in 30-50pct
 #' @export
 #' @examples
 #' get_affordability_matrix_from_chas(geography = "place", state = "ID", bin_adjustment_type = "unify")
