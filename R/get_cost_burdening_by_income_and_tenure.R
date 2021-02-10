@@ -1,17 +1,17 @@
 #' Get Cost Burdening by Income and Tenure
 #'
 #' This function uses the census API to pull down cost burdening data from table B25106 of the ACS. It then tidies the returned data.
-#' @param year Defaults to 2019, value passed to the census API call
 #' @param geography The unit of geography to return data for, options are "state", "county", "place" and "tract". This value is passed to the census API call
 #' @param state U.S. state to return data for, value passed to the census API call. Defaults to NULL
 #' @param county Defaults to NULL, option to return tract or county data from a specific county. Can't return place data from a specific county. This value is passed to census API call
+#' @param year Defaults to 2019, value passed to the census API call
 #' @param survey Defaults to "acs5", the version of the ACS to return. Options are "acs5" and "acs1" for either the five-year or one-year ACS survey. Value passed to census API call
 #' @export
 #' @examples
 #' get_cost_burdening_by_income_and_tenure(year = 2019, geography = "county", state = "ID", survey = "acs5")
 
 
-get_cost_burdening_by_income_and_tenure <- function(year = 2019, geography, state = NULL, county = NULL, survey = "acs5") {
+get_cost_burdening_by_income_and_tenure <- function(geography, state = NULL, county = NULL, year = 2019, survey = "acs5") {
 
   # restrict queries to state, county, place, and tract
   if (!geography %in% c("state", "county", "place", "tract")) {
