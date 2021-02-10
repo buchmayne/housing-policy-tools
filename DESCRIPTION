@@ -11,4 +11,5 @@ LazyData: true
 Depends:
   dplyr,
   tidycensus,
-  stringr
+  stringr,
+  tidyr
