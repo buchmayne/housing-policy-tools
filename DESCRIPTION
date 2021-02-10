@@ -13,3 +13,4 @@ Depends:
   tidycensus,
   stringr,
   tidyr
+RoxygenNote: 7.1.1
